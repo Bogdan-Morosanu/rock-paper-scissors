@@ -19,7 +19,7 @@ namespace rps
     struct RoundResult {
 	enum RoundResultType { WIN, DRAW };
 
-	RoundResultType resultType;
+	RoundResultType type;
 
 	PlayerId winner;
     };

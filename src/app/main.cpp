@@ -10,4 +10,6 @@ int main(int argc, char **argv)
     parser.pushBack(psr::UnaryCommandParser<psr::EchoCommand>());
 
     parser.parseStream(std::cin, std::cerr);
+
+    return 0;
 }
