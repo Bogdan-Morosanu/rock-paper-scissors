@@ -1,5 +1,4 @@
 #include "Parser.hpp"
-
 namespace psr {
     
     /// parse input stream in and log parsing errors to err

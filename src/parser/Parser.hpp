@@ -1,7 +1,9 @@
 #ifndef PSR_CASE_PARSER
 #define PSR_CASE_PARSER
 
-#include "CommandParser.hpp"
+#include <iostream>
+
+#include "Commands.hpp"
 
 namespace psr {
 
