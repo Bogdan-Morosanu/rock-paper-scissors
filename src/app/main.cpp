@@ -7,11 +7,13 @@
 int main(int argc, char **argv)
 {
     psr::Parser parser;
+    app::Game game;
+    
+    parser.pushBack(psr::unaryCommandParser(psr::EchoCommand{}));
 
-    parser.pushBack(psr::UnaryCommandParser<psr::EchoCommand>());
-    parser.pushBack(psr::CommandParser<app::RockCommand>());
-    parser.pushBack(psr::CommandParser<app::PaperCommand>());
-    parser.pushBack(psr::CommandParser<app::ScissorsCommand>());
+    parser.pushBack(psr::commandParser(app::RockCommand{game}));
+    parser.pushBack(psr::commandParser(app::PaperCommand{game}));
+    parser.pushBack(psr::commandParser(app::ScissorsCommand{game}));
     
     parser.parseStream(std::cin, std::cerr);
 

@@ -4,11 +4,17 @@
 #include <iostream>
 
 #include "parser/Commands.hpp"
+#include "app/Game.hpp"
 
 namespace app
 {
     class RockCommand {
     public:
+
+	explicit
+	RockCommand(Game &game)
+	    : mGame(&game)
+	{ }
 
 	std::string name() const
 	{
@@ -18,12 +24,23 @@ namespace app
 	void issue() const
 	{
 	    std::cout << "rock!" << std::endl;
+	    mGame->registerPlayerMove(rps::Move::ROCK);
 	}
+
+    private:
+
+	// a pointer becase we need this class to support copy/move/swap
+	app::Game *mGame;
     };
 
     class PaperCommand {
     public:
 
+	explicit
+	PaperCommand(Game &game)
+	    : mGame(&game)
+	{ }
+	
 	std::string name() const
 	{
 	    return "paper";
@@ -32,12 +49,23 @@ namespace app
 	void issue() const
 	{
 	    std::cout << "paper!" << std::endl;
+	    mGame->registerPlayerMove(rps::Move::PAPER);
 	}
+
+    private:
+
+	// a pointer becase we need this class to support copy/move/swap
+	app::Game *mGame;
     };
 
     class ScissorsCommand {
     public:
 
+	explicit
+	ScissorsCOmmand(Game &game)
+	    : mGame(&game)
+	{ }
+	
 	std::string name() const
 	{
 	    return "scissors";
@@ -46,7 +74,13 @@ namespace app
 	void issue() const
 	{
 	    std::cout << "scissors!" << std::endl;
+	    mGame->registerPlayerMove(rps::Move::SCISSORS);
 	}
+
+    private:
+
+	// a pointer becase we need this class to support copy/move/swap
+	app::Game *mGame;
     };
 }
 

@@ -50,6 +50,13 @@ namespace psr {
 	Command command;
     };
 
+    template < typename Command >
+    auto unaryCommandParser(Command &&c)
+    {
+	using ValueType = typename std::decay<Command>::type;
+	return UnaryCommandParser<ValueType>(std::forward<Command>(c));
+    }
+    
     /// @brief adapts a Nullary (with zero args) Command object to be included in a Case parser.
     ///        This parses a command in the form of "<command-name>".
     ///        You need to provide a copy or move-constructible type with the member functions:
@@ -87,6 +94,13 @@ namespace psr {
 	Command command;
     };
 
+    template < typename Command >
+    auto commandParser(Command &&c)
+    {
+	using CommandType = typename std::decay<Command>::type;
+	return CommandParser<ValueType>(std::forward<Command>(c));
+    }
+    
     /// @brief special exit command parser, detects pattern that will end parsing.
     class ExitCommandParser {
     public:
