@@ -5,26 +5,12 @@
 
 namespace rps
 {
-    struct Move {
-
-	enum MoveType { ROCK, PAPER, SCISSORS };
-	
-	PlayerId player;
-	
-	MoveType moveType;
-    };
-
+    enum class Move { ROCK, PAPER, SCISSORS };
 
     /// represents the result of playing one round of rock-paper-scissors
-    struct RoundResult {
-	enum RoundResultType { WIN, DRAW };
-
-	RoundResultType type;
-
-	PlayerId winner;
-    };
+    enum class RoundResult { WIN_LEFT, DRAW, WIN_RIGHT };
     
-    RoundResult result(Move left, Move right);
+    RoundResult roundResult(Move left, Move right);
 }
 
 #endif
