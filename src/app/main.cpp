@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
     psr::Parser parser;
-    app::Game game("Player1", "Player2");
+    app::GameApp game;
     
     parser.pushBack(psr::unaryCommandParser(psr::EchoCommand{}));
 
