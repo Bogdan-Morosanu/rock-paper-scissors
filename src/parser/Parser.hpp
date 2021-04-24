@@ -1,5 +1,5 @@
-#ifndef PSR_CASE_PARSER
-#define PSR_CASE_PARSER
+#ifndef PSR_PARSER
+#define PSR_PARSER
 
 #include <iostream>
 
@@ -38,7 +38,7 @@ namespace psr {
 	// requiring intrusive intervention like inheriting from some base class (which may be
 	// undesirable).
 	//
-	// all our users need to do is provide *any* type with a given interface.
+	// all our users need to do is provide *any* type with the given interface.
 	//
 	struct CaseConcept {
 

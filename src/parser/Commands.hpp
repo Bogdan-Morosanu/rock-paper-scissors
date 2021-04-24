@@ -1,5 +1,5 @@
-#ifndef PSR_COMMAND_PARSER
-#define PSR_COMMAND_PARSER
+#ifndef PSR_COMMANDS
+#define PSR_COMMANDS
 
 #include <string>
 #include <regex>
