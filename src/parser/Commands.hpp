@@ -97,7 +97,7 @@ namespace psr {
     template < typename Command >
     auto commandParser(Command &&c)
     {
-	using CommandType = typename std::decay<Command>::type;
+	using ValueType = typename std::decay<Command>::type;
 	return CommandParser<ValueType>(std::forward<Command>(c));
     }
     

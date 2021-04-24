@@ -1,9 +1,10 @@
 #ifndef GAME_GAME_HISTORY
 #define GAME_GAME_HISTORY
 
+#include <vector>
+
 #include "Player.hpp"
 #include "Move.hpp"
-
 
 namespace rps
 {
@@ -25,6 +26,8 @@ namespace rps
     class GameHistory {
     public:
 
+	GameHistory() = default;
+	
 	struct Round {
 
 	    Move left;
@@ -33,8 +36,8 @@ namespace rps
 	};
 
 	GameHistory(PlayerId leftId, PlayerId rightId)
-	    : mResult({leftId, 0u}, {rightId, 0u})
-	    , mRounds()
+	    : mResult{{leftId, 0u}, {rightId, 0u}}
+	    , mRounds{}
 	{ }
 	
 	void add(Move left, Move right)
@@ -57,9 +60,9 @@ namespace rps
 	    }
 	}
 
-	const Round& getRound(std::uint32_t i) const { return mRounds[i]; };
+	const Round& round(std::uint32_t i) const { return mRounds[i]; };
 
-	const GameResult& getResult() const { return mResult };
+	const GameResult& result() const { return mResult; };
 	
     private:
 

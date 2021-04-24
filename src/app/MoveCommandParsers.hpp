@@ -25,6 +25,7 @@ namespace app
 	{
 	    std::cout << "rock!" << std::endl;
 	    mGame->registerPlayerMove(rps::Move::ROCK);
+	    mGame->streamResult(std::cout);
 	}
 
     private:
@@ -50,6 +51,7 @@ namespace app
 	{
 	    std::cout << "paper!" << std::endl;
 	    mGame->registerPlayerMove(rps::Move::PAPER);
+	    mGame->streamResult(std::cout);
 	}
 
     private:
@@ -62,7 +64,7 @@ namespace app
     public:
 
 	explicit
-	ScissorsCOmmand(Game &game)
+	ScissorsCommand(Game &game)
 	    : mGame(&game)
 	{ }
 	
@@ -75,6 +77,7 @@ namespace app
 	{
 	    std::cout << "scissors!" << std::endl;
 	    mGame->registerPlayerMove(rps::Move::SCISSORS);
+	    mGame->streamResult(std::cout);
 	}
 
     private:
