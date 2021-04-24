@@ -1,4 +1,5 @@
 #include "game/Move.hpp"
+#include "game/GameHistory.hpp"
 
 #include <iostream>
 
@@ -25,9 +26,13 @@ namespace {
 
 void runMoveTests();
 
+void runGameHistoryTests();
+
 int main(int argc, char **argv)
 {
     runMoveTests();
+
+    runGameHistoryTests();
 
     return 0;
 }
@@ -82,5 +87,63 @@ void runMoveTests()
 	require(result == rps::RoundResult::DRAW, "failure case: SCISSORS draw vs SCISSORS");
     }
 
-    message("Move logic tests success!");
+    message("Move logic tests success!\n");
+}
+
+
+void runGameHistoryTests()
+{
+    message("Running game history tests...");
+
+    {
+	message("\tValid empty history");
+	
+	rps::GameHistory history(0u, 1u);
+
+	auto result = history.result();
+	require(result.left.score == 0u && result.right.score == 0u, "failure case: initial score not 0 - 0");
+	require(result.left.player == 0u && result.right.player == 1u, "failuer case: player ids not propagated to history");
+    }
+
+    {
+	message("\tSingle round win");
+	
+	rps::GameHistory history(0u, 1u);
+
+	history.add(rps::Move::ROCK, rps::Move::SCISSORS);
+	
+	auto result = history.result();
+	
+	require(result.left.score == 1u && result.right.score == 0u, "failure case: one round, should result in 1 - 0 score");
+    }
+
+
+    {
+	message("\tSingle round draw");
+	
+	rps::GameHistory history(0u, 1u);
+
+	history.add(rps::Move::ROCK, rps::Move::ROCK);
+	
+	auto result = history.result();
+	
+	require(result.left.score == 0u && result.right.score == 0u, "failure case: one round, should result in 0 - 0 score");
+    }
+
+    {
+	message("\tMultiple rounds");
+	
+	rps::GameHistory history(0u, 1u);
+
+	history.add(rps::Move::PAPER, rps::Move::PAPER);
+	history.add(rps::Move::SCISSORS, rps::Move::ROCK);
+	history.add(rps::Move::ROCK, rps::Move::PAPER);
+	history.add(rps::Move::ROCK, rps::Move::SCISSORS);
+	
+	auto result = history.result();
+	
+	require(result.left.score == 1u && result.right.score == 2u, "failure case: three rounds, should result in 1 - 2 score");
+    }
+
+    message("Game history tests success!\n");
 }

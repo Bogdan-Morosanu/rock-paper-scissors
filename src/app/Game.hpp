@@ -27,7 +27,8 @@ namespace app
 
 	    if (turnComplete) {
 		mHistory.add(prev, move);
-
+		this->streamResult(std::cout);
+		
 	    } else {
 		prev = move;
 	    }
