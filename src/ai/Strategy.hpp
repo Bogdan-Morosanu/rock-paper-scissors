@@ -3,38 +3,36 @@
 
 #include <cstdlib>
 #include <ctime>
+#include <memory>
 
 #include "game/Move.hpp"
 
 namespace ai
 {
-
+    namespace detail
+    {
+	class StrategyImpl;
+    }
+    
     class Strategy {
     public:
 
-	Strategy()
-	{
-	    std::srand(static_cast<unsigned>(std::time(0)));
-	}
+	enum StrategyType { CYBER_CHICKEN, SPACE_SQUID, ELECTRIC_ELEPHANT, SCADA_SYSTEM };
+
+	explicit
+	Strategy(StrategyType type = CYBER_CHICKEN);
 	
 	/// inform the ai strategy of the newest move our adversary has made
-	void perceiveAdversaryMove(rps::Move move) { }
+	void perceiveAdversaryMove(rps::Move move);
 
 	/// request the next move our strategy will play against our adversary
-	rps::Move nextMove() const
-	{
-	    switch(std::rand() % 3) {
-	    case 0:
-		return rps::Move::ROCK;
-	    case 1:
-		return rps::Move::PAPER;
-	    case 2: default: // default for compiler warnings
-		return rps::Move::SCISSORS;
-	    }
-	}
+	rps::Move nextMove() const;
 
-    private:
+	~Strategy();
 	
+    private:
+
+	std::unique_ptr<detail::StrategyImpl> mImpl;
     };
 }
 

@@ -17,7 +17,7 @@ namespace app
 	GameApp()
 	    : mHumanName("You")
 	    , mHistory(rps::PlayerId{0u}, rps::PlayerId{1u})
-	    , mAi("Cyber Chicken")
+	    , mAi("Electric Elephant", ai::Strategy::ELECTRIC_ELEPHANT)
 	{ }
 	
 	void registerPlayerMove(rps::Move move);

@@ -9,8 +9,9 @@ namespace app
     public:
 
 	explicit
-	AiPlayer(std::string name)
+	AiPlayer(std::string name, ai::Strategy::StrategyType strategy)
 	    : mName(std::move(name))
+	    , mStrategy(strategy)
 	{ }
 	
 	const std::string &name() const { return mName; }
