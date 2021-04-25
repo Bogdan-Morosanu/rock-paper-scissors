@@ -25,7 +25,10 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::ROCK);
-	    displayPrompt();
+
+	    if (mGame->roundsLeft() != 0u) {
+		displayPrompt();
+	    }
 	}
 
     private:
@@ -50,7 +53,10 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::PAPER);
-	    displayPrompt();
+
+	    if (mGame->roundsLeft() != 0u) {
+		displayPrompt();
+	    }
 	}
 
     private:
@@ -75,7 +81,10 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::SCISSORS);
-	    displayPrompt();
+
+	    if (mGame->roundsLeft() != 0u) {
+		displayPrompt();
+	    }
 	}
 
     private:

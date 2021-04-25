@@ -15,6 +15,7 @@ namespace psr {
 	    : cases()
 	    , exitParser(std::make_unique<CaseModel<CommandParser<ExitCommand>>>(standardExitParser()))
 	    , exitCallback([]() { return false; })
+	    , printPrompt([](){ })
 	{ }
 
 	template < typename Case >
@@ -34,6 +35,11 @@ namespace psr {
 	void setExitCallback(std::function<bool(void)> ec)
 	{
 	    exitCallback = std::move(ec);
+	}
+
+	void setPromptCallback(std::function<void(void)> pc)
+	{
+	    printPrompt = std::move(pc);
 	}
         
 	/// parse input stream in and log parsing errors to err
@@ -76,6 +82,8 @@ namespace psr {
 	std::unique_ptr<CaseConcept> exitParser;
 
 	std::function<bool(void)> exitCallback;
+
+	std::function<void(void)> printPrompt;
     };
 }
 

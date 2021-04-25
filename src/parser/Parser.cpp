@@ -21,7 +21,8 @@ namespace psr {
 	    }
 		
 	    if (!success) { // command not recognised
-		err << "command not recognised \"" << s << "\"" << std::endl;		    
+		err << "command not recognised \"" << s << "\"" << std::endl;
+		printPrompt();
 	    }
 	}
     }
