@@ -31,7 +31,7 @@ void runGameHistoryTests();
 
 void runGameAppTests();
 
-void runOptionTests();
+void runOptionalTests();
 
 int main(int argc, char **argv)
 {
@@ -41,6 +41,8 @@ int main(int argc, char **argv)
 
     runGameAppTests();
 
+    runOptionalTests();
+    
     return 0;
 }
 
@@ -236,4 +238,94 @@ void runGameHistoryTests()
     }
 
     message("Game history tests success!\n");
+}
+
+namespace {
+
+    struct DecrementOnDtor {
+    public:
+	explicit
+	DecrementOnDtor(int &count)
+	    : mCount(&count)
+	{ }
+
+	DecrementOnDtor(DecrementOnDtor &&other)
+	    : mCount(other.mCount)
+	{
+	    // signal decrement ownership has been transfered
+	    other.mCount = nullptr;
+	}
+
+	DecrementOnDtor &operator = (DecrementOnDtor &&other)
+	{
+	    mCount = other.mCount;
+	    // signal decrement ownership has been transfered
+	    other.mCount = nullptr;
+
+	    return *this;
+	}
+
+	
+	~DecrementOnDtor()
+	{
+	    // only decrement if we actually have a decrement ownership
+	    // (if not we've been moved from)
+	    if (mCount != nullptr) {
+		(*mCount)--;
+	    }
+	}
+
+    private:
+	// a pointer so our class behaves like a POD
+	int *mCount;
+    };
+
+}
+void runOptionalTests()
+{
+    message("Running optional class tests...");
+
+    {
+	message("\tInvalid after default ctor");
+
+	app::Optional<int> maybeInt;
+
+	require(!maybeInt.isValid(), "failure case: Option valid after default construction");
+    }
+
+    {
+	message("\tValid after value ctor");
+
+	app::Optional<int> maybeInt(3);
+
+	require(maybeInt.isValid(), "failure case: Option invalid after value construction");
+	require(maybeInt.value() == 3, "failure case: Option value not correctly copied in value construction");
+    }
+
+    {
+	message("\tValid after copy assignment");
+
+	app::Optional<int> maybeInt;
+
+	maybeInt = 3;
+	require(maybeInt.isValid(), "failure case: Option invalid after copy assignment");
+	require(maybeInt.value() == 3, "failure case: Option value not correctly copied in copy assignment");
+    }
+
+    {
+	message("\tNon-trivial dtor and move correctly called");
+
+	int refcount = 1;
+	
+	{
+	    // move decrement responsibility into option
+	    app::Optional<DecrementOnDtor> maybeInt(DecrementOnDtor{refcount});
+	}
+
+	// make sure exactly one decrement has happened
+	require(refcount == 0, "failure case: single decrement did not happen on non-trivial dtor/move operations");
+    }
+
+    
+    message("Optional class tests success!\n");
 }
