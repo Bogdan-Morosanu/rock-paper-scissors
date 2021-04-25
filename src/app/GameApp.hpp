@@ -38,7 +38,7 @@ namespace app
 	
     private:
 
-	rps::GameResult result();
+	rps::GameResult result() const;
 	
 	void streamResult(std::ostream &out);
 
