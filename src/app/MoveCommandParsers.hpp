@@ -22,13 +22,15 @@ namespace app
 	    return "rock";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::ROCK);
 
 	    if (mGame->roundsLeft() != 0u) {
 		displayPrompt();
 	    }
+
+	    return true;
 	}
 
     private:
@@ -50,13 +52,15 @@ namespace app
 	    return "paper";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::PAPER);
 
 	    if (mGame->roundsLeft() != 0u) {
 		displayPrompt();
 	    }
+
+	    return true;
 	}
 
     private:
@@ -78,13 +82,15 @@ namespace app
 	    return "scissors";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::SCISSORS);
 
 	    if (mGame->roundsLeft() != 0u) {
 		displayPrompt();
 	    }
+
+	    return true;
 	}
 
     private:

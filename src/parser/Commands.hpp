@@ -15,11 +15,13 @@ namespace psr {
     ///              2) std::string pattern()    - gives the regex pattern of strings you want to
     ///                                            accept as arguments.
     ///
-    ///              3) void issue(iter it)      - that will be called when the command is
+    ///              3) bool issue(iter it)      - that will be called when the command is
     ///                                            detected by the parser in the input.
     ///                                            iter is defined as:
     ///                                               using iter = std::string::const_iterator;
-    ///                                            it points to the first character in the argument. 
+    ///                                            it points to the first character in the argument.
+    ///                                            returns true if the command can and has been
+    ///                                            executed, false otherwise.
     template < typename Command >
     class UnaryCommandParser {
     public:
@@ -35,8 +37,7 @@ namespace psr {
 	    std::smatch matches;
 
 	    if (std::regex_match(s, matches, rgx)) {
-		command.issue(matches[1].first);
-		return true;
+		return command.issue(matches[1].first);
 
 	    } else {
 		return false;
@@ -62,8 +63,10 @@ namespace psr {
     ///        You need to provide a copy or move-constructible type with the member functions:
     ///              1) std::string name()       - gives the name of the command
     ///
-    ///              2) void issue()             - that will be called when the command is
-    ///                                            detected by the parser in the input.
+    ///              2) bool issue()             - that will be called when the command is
+    ///                                            detected by the parser in the input. returns
+    ///                                            true if the command can and has been executed,
+    ///                                            false otherwise.
     template < typename Command >
     class CommandParser {
     public:
@@ -79,8 +82,7 @@ namespace psr {
 	    std::smatch matches;
 
 	    if (std::regex_match(s, matches, rgx)) {
-		command.issue();
-		return true;
+		return command.issue();
 
 	    } else {
 		return false;
@@ -109,7 +111,9 @@ namespace psr {
     ///
     ///              2) void issue(std::string)             - that will be called when the command is
     ///                                                       detected by the parser in the input, passing
-    ///                                                       the matched string as an argument.
+    ///                                                       the matched string as an argument. returns
+    ///                                                       true if the command can and has been executed,
+    ///                                                       false otherwise.
     template < typename Command >
     class GlobCommandParser {
     public:
@@ -125,9 +129,8 @@ namespace psr {
 	    std::smatch matches;
 
 	    if (std::regex_match(s, matches, rgx)) {
-		command.issue(s);
-		return true;
-
+		return command.issue(s);
+		
 	    } else {
 		return false;
 	    }
@@ -153,9 +156,10 @@ namespace psr {
 	
 	std::string name() const { return "exit"; }
 
-	void issue()
+	bool issue()
 	{
 	    // do nothing, just let the parser exit
+	    return true;
 	}
     };
 

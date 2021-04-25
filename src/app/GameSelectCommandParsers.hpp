@@ -21,7 +21,7 @@ namespace app
 	    return "Cyber Chicken";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    if (!mGame->hasAi()) {
 		std::cout << "Tilting its head at an angle and staring blankly into your soul,\n"
@@ -35,6 +35,7 @@ namespace app
 	    }
 
 	    displayPrompt();
+	    return true;
 	}
 
     private:
@@ -56,7 +57,7 @@ namespace app
 	    return "Electric Elephant";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    if (!mGame->hasAi()) {
 		std::cout << "The Electric Elephant slowly moves to face you. Calculated and\n"
@@ -70,6 +71,7 @@ namespace app
 	    }
 
 	    displayPrompt();
+	    return true;
 	}
 
     private:
@@ -91,7 +93,7 @@ namespace app
 	    return "Space Squid";
 	}
 
-	void issue() const
+	bool issue() const
 	{
 	    if (!mGame->hasAi()) {
 		std::cout << "Squirming with frantic excitement, the Space Squid seems\n"
@@ -105,6 +107,7 @@ namespace app
 	    }
 
 	    displayPrompt();
+	    return true;
 	}
 
     private:
@@ -126,8 +129,12 @@ namespace app
 	    return "[+-]?\\d+\\.?\\d*";
 	}
 
-	void issue(const std::string &str) const
+	bool issue(const std::string &str) const
 	{
+	    if (!mGame->hasAi()) {
+		return false;
+	    }
+	    
 	    auto annoyedMessage = []()
 	                          {
 			               std::cout << "Annoyed with your unreasonable number of rounds, the pirates\n"
@@ -156,6 +163,7 @@ namespace app
 
 	    std::cout << "Make your first move:\n";
 	    displayPrompt();
+	    return true;
 	}
  
     private:
