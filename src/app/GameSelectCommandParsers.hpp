@@ -95,7 +95,7 @@ namespace app
 	{
 	    if (!mGame->hasAi()) {
 		std::cout << "Squirming with frantic excitement, the Space Squid seems\n"
-		          << "excited to figure out your strategy. Select the number of rounds:"
+		          << "eager to figure out your strategy. Select the number of rounds:"
 		          << std::endl;
 		
 		mGame->setAi(ai::Strategy::SPACE_SQUID);
