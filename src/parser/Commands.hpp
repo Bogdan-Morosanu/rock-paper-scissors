@@ -100,27 +100,69 @@ namespace psr {
 	using ValueType = typename std::decay<Command>::type;
 	return CommandParser<ValueType>(std::forward<Command>(c));
     }
-    
-    /// @brief special exit command parser, detects pattern that will end parsing.
-    class ExitCommandParser {
+
+    /// @brief adapts a Nullary (with zero args) Command object to be included in a Case parser.
+    ///        This parses a command in the form of "<regex-pattern>" and sends the string that
+    ///        has matched it back to the underlying command object.
+    ///        You need to provide a copy or move-constructible type with the member functions:
+    ///              1) std::string pattern()               - regular expression to match the strings
+    ///
+    ///              2) void issue(std::string)             - that will be called when the command is
+    ///                                                       detected by the parser in the input, passing
+    ///                                                       the matched string as an argument.
+    template < typename Command >
+    class GlobCommandParser {
     public:
 	
 	explicit
-	ExitCommandParser(std::string name = "exit")
-	    : rgx(std::move(name))
+	GlobCommandParser(Command c = Command())
+	    : rgx("^\\s*" + c.pattern() + "\\s*$")
+	    , command(std::move(c))
 	{ }
 
-	bool accept(const std::string &s) const
+	bool accept(const std::string &s)
 	{
 	    std::smatch matches;
 
-	    return std::regex_match(s, matches, rgx);
-	}
+	    if (std::regex_match(s, matches, rgx)) {
+		command.issue(s);
+		return true;
 
+	    } else {
+		return false;
+	    }
+	}
+	
     private:
 
 	std::regex rgx;
+	
+	Command command;
     };
+
+    template < typename Command >
+    auto globCommandParser(Command &&c)
+    {
+	using ValueType = typename std::decay<Command>::type;
+	return GlobCommandParser<ValueType>(std::forward<Command>(c));
+    }
+    
+    /// @brief standard exit command, matches "exit" as the pattern that will end parsing.
+    class ExitCommand {
+    public:
+	
+	std::string name() const { return "exit"; }
+
+	void issue()
+	{
+	    // do nothing, just let the parser exit
+	}
+    };
+
+    inline auto standardExitParser()
+    {
+	return commandParser(ExitCommand{});
+    }
 }
 
 #endif

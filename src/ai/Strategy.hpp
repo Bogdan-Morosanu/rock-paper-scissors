@@ -21,6 +21,10 @@ namespace ai
 
 	explicit
 	Strategy(StrategyType type = CYBER_CHICKEN);
+
+	Strategy(Strategy &&);
+
+	Strategy & operator = (Strategy &&);
 	
 	/// inform the ai strategy of the newest move our adversary has made
 	void perceiveAdversaryMove(rps::Move move);

@@ -16,7 +16,7 @@ namespace psr {
 		}
 	    }
 
-	    if (exitParser.accept(s)) {
+	    if (exitParser->accept(s)) {
 		break; // end parsing
 	    }
 		

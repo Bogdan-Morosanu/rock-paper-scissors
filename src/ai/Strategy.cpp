@@ -194,4 +194,8 @@ namespace detail
     }
 
     Strategy::~Strategy() = default;
+
+    Strategy::Strategy(Strategy &&other) = default;
+
+    Strategy &Strategy::operator = (Strategy &&other) = default;
 }

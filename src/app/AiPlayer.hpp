@@ -13,6 +13,10 @@ namespace app
 	    : mName(std::move(name))
 	    , mStrategy(strategy)
 	{ }
+
+	AiPlayer(AiPlayer &&other) = default;
+
+	AiPlayer & operator = (AiPlayer &&other) = default;
 	
 	const std::string &name() const { return mName; }
 

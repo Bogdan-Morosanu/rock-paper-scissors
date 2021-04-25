@@ -1,5 +1,7 @@
 #include "GameApp.hpp"
 
+#include <string>
+
 namespace
 {
     std::string toString(rps::Move move)
@@ -20,13 +22,21 @@ namespace
 
 namespace app
 {
-
+    bool GameApp::hasAi() const
+    {
+	return mAi.isValid();
+    }
+    
     void GameApp::registerPlayerMove(rps::Move move)
     {
-	rps::Move aiMove = mAi.nextMove();
+	if (!mAi.isValid()) {
+	    throw std::logic_error("GameApp::registerPlayerMove ai oponent not generated yet!");
+	}
+	
+	rps::Move aiMove = mAi.value().nextMove();
 
 	std::cout << mHumanName << " chose " << toString(move) << "\n"
-		  << mAi.name() << " chose " << toString(aiMove) << "\n";
+		  << mAi.value().name() << " chose " << toString(aiMove) << "\n";
 
 	switch (rps::roundResult(move, aiMove)) {
 	case rps::RoundResult::WIN_LEFT:
@@ -38,17 +48,49 @@ namespace app
 	    break;
 		
 	case rps::RoundResult::WIN_RIGHT:
-	    std::cout << mAi.name() << " won!\n" << std::endl;
+	    std::cout << mAi.value().name() << " won!\n" << std::endl;
 	    break;
 	}
 	    
 	mHistory.add(move, aiMove);
 
-	mAi.perceiveAdversaryMove(move);
+	mAi.value().perceiveAdversaryMove(move);
 
 	streamResult(std::cout);
     }
 
+    void GameApp::setAi(ai::Strategy::StrategyType strategy)
+    {
+	auto stratToString = [](ai::Strategy::StrategyType strat)
+	                     {
+				 switch (strat) {
+				 case ai::Strategy::CYBER_CHICKEN:
+				     return "Cyber Chicken";
+				     
+				 case ai::Strategy::ELECTRIC_ELEPHANT:
+				     return "Electric Elephant";
+				     
+				 case ai::Strategy::SPACE_SQUID: default: // default for compiler warning
+				     return "Space Squid";				     
+				 }
+	                     };
+	
+	mAi = app::AiPlayer(stratToString(strategy), strategy);
+    }
+
+    void GameApp::setNrRounds(std::uint32_t nrRounds)
+    {
+	mNrRounds = nrRounds;
+	std::cout << "Number of rounds set to " << std::to_string(nrRounds) << std::endl;
+    }
+    
+    void GameApp::printIntro()
+    {
+	std::cout << "Welcome to space pirate RPS simulator!" << std::endl;
+	std::cout << "Please select your oponent" << std::endl;
+	std::cout << ">>>";
+    }
+    
     rps::GameResult GameApp::result()
     {
 	return mHistory.result();
@@ -56,10 +98,14 @@ namespace app
 
     void GameApp::streamResult(std::ostream &out)
     {
+	if (!mAi.isValid()) {
+	    throw std::logic_error("GameApp::streamResult ai oponent not generated yet!");
+	}
+
 	auto gameResult = this->result();
 	out << "Game Score:\n"
 	    << mHumanName << " - " << gameResult.left.score << "\n"
-	    << mAi.name() << " - " << gameResult.right.score << std::endl;
+	    << mAi.value().name() << " - " << gameResult.right.score << std::endl;
     }
 
 }

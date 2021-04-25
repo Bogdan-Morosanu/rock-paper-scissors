@@ -1,11 +1,13 @@
 #ifndef APP_GAME_APP
 #define APP_GAME_APP
 
-#include <iostream>
 #include <array>
+#include <iostream>
+#include <cstdint>
 
 #include "game/GameHistory.hpp"
 #include "app/AiPlayer.hpp"
+#include "app/Optional.hpp"
 
 namespace app
 {
@@ -17,10 +19,18 @@ namespace app
 	GameApp()
 	    : mHumanName("You")
 	    , mHistory(rps::PlayerId{0u}, rps::PlayerId{1u})
-	    , mAi("Electric Elephant", ai::Strategy::ELECTRIC_ELEPHANT)
+	    , mAi()
 	{ }
 	
 	void registerPlayerMove(rps::Move move);
+
+	void setAi(ai::Strategy::StrategyType strategy);
+
+	void setNrRounds(std::uint32_t nrRounds);
+	
+	void printIntro();
+
+	bool hasAi() const;
 	
     private:
 
@@ -32,7 +42,9 @@ namespace app
 	
 	rps::GameHistory mHistory;
 
-	app::AiPlayer mAi;
+	std::uint32_t mNrRounds;
+	
+	app::Optional<app::AiPlayer> mAi;
     };
 }
 
