@@ -48,28 +48,32 @@ namespace app
 	
 	rps::Move aiMove = mAi.value().nextMove();
 
-	std::cout << mHumanName << " chose " << toString(move) << "\n"
-		  << mAi.value().name() << " chose " << toString(aiMove) << "\n";
+	if (mLogLevel == LOG_NORMAL) {
+	    std::cout << mHumanName << " chose " << toString(move) << "\n"
+		      << mAi.value().name() << " chose " << toString(aiMove) << "\n";
 
-	switch (rps::roundResult(move, aiMove)) {
-	case rps::RoundResult::WIN_LEFT:
-	    std::cout << mHumanName << " won!\n" << std::endl;
-	    break;
+	    switch (rps::roundResult(move, aiMove)) {
+	    case rps::RoundResult::WIN_LEFT:
+		std::cout << mHumanName << " won!\n" << std::endl;
+		break;
 		
-	case rps::RoundResult::DRAW:
-	    std::cout << "draw!\n" << std::endl;
-	    break;
+	    case rps::RoundResult::DRAW:
+		std::cout << "draw!\n" << std::endl;
+		break;
 		
-	case rps::RoundResult::WIN_RIGHT:
-	    std::cout << mAi.value().name() << " won!\n" << std::endl;
-	    break;
+	    case rps::RoundResult::WIN_RIGHT:
+		std::cout << mAi.value().name() << " won!\n" << std::endl;
+		break;
+	    }
 	}
 	
 	mHistory.add(move, aiMove);
 
 	mAi.value().perceiveAdversaryMove(move);
 
-	streamResult(std::cout);
+	if (mLogLevel == LOG_NORMAL) {
+	    streamResult(std::cout);
+	}
     }
 
     void GameApp::setAi(ai::Strategy::StrategyType strategy)
@@ -94,7 +98,9 @@ namespace app
     void GameApp::setNrRounds(std::uint32_t nrRounds)
     {
 	mNrRounds = nrRounds;
-	std::cout << "Number of rounds set to " << std::to_string(nrRounds) << std::endl;
+	if (mLogLevel == LOG_NORMAL) {
+	    std::cout << "Number of rounds set to " << std::to_string(nrRounds) << std::endl;
+	}
     }
     
     void GameApp::printGameIntro() const

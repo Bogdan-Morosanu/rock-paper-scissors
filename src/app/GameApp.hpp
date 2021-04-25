@@ -16,8 +16,12 @@ namespace app
     class GameApp {
     public:
 
-	GameApp()
-	    : mHumanName("You")
+	enum LogLevel { LOG_NOTHING, LOG_NORMAL };
+	
+	explicit
+	GameApp(LogLevel logLevel = LOG_NORMAL)
+	    : mLogLevel(logLevel)
+	    , mHumanName("You")
 	    , mHistory(rps::PlayerId{0u}, rps::PlayerId{1u})
 	    , mAi()
 	{ }
@@ -42,6 +46,8 @@ namespace app
 	
 	void streamResult(std::ostream &out);
 
+	LogLevel mLogLevel;
+	
 	std::string mHumanName;
 	
 	rps::GameHistory mHistory;

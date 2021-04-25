@@ -1,5 +1,6 @@
 #include "game/Move.hpp"
 #include "game/GameHistory.hpp"
+#include "app/GameApp.hpp"
 
 #include <iostream>
 
@@ -28,18 +29,107 @@ void runMoveTests();
 
 void runGameHistoryTests();
 
+void runGameAppTests();
+
+void runOptionTests();
+
 int main(int argc, char **argv)
 {
     runMoveTests();
 
     runGameHistoryTests();
 
+    runGameAppTests();
+
     return 0;
+}
+
+void runGameAppTests()
+{
+    message("Running game app tests...");
+
+    {
+	message("\tNo Ai on construction.");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	require(!game.hasAi(), "failure case: ai populated before user input");
+    }
+
+    {
+	message("\tAi set after user input");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	game.setAi(ai::Strategy::CYBER_CHICKEN);
+	require(game.hasAi(), "failure case: not set after user input");
+    }
+
+    {
+	message("\tMoves correctly set after user input");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	game.setAi(ai::Strategy::CYBER_CHICKEN);
+	game.setNrRounds(10u);
+	require(game.roundsLeft() == 10u, "failure case: number of rounds left not set correctly");
+    }
+
+    {
+	message("\tMoves correctly decremented after round played");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	game.setAi(ai::Strategy::CYBER_CHICKEN);
+	game.setNrRounds(10u);
+
+	game.registerPlayerMove(rps::Move::ROCK);
+	require(game.roundsLeft() == 9u, "failure case: number of rounds left not decremented after round takes place");
+
+	game.registerPlayerMove(rps::Move::ROCK);
+	require(game.roundsLeft() == 8u, "failure case: number of rounds left not decremented after round takes place");
+	
+	game.registerPlayerMove(rps::Move::ROCK);
+	require(game.roundsLeft() == 7u, "failure case: number of rounds left not decremented after round takes place");
+    }
+
+    {
+	message("\tThrows on playing round in finished game");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	game.setAi(ai::Strategy::CYBER_CHICKEN);
+	game.setNrRounds(1u);
+
+	game.registerPlayerMove(rps::Move::ROCK);
+
+	bool hasThrown = false;
+	try {
+	    game.registerPlayerMove(rps::Move::ROCK);
+	} catch(...) {
+	    hasThrown = true;
+	}
+
+	require(hasThrown, "failure case: no throw when trying to play moves in an already finished game!");
+    }
+
+    {
+	message("\tThrows on playing round in game without a selected AI");
+	app::GameApp game(app::GameApp::LOG_NOTHING);
+
+	game.setNrRounds(1u);
+	
+	bool hasThrown = false;
+	try {
+	    game.registerPlayerMove(rps::Move::ROCK);
+	} catch(...) {
+	    hasThrown = true;
+	}
+
+	require(hasThrown, "failure case: no throw when trying to play moves in a game without a selected Ai oponent!");
+    }
+
+    message("Game app tests success!\n");
 }
 
 void runMoveTests()
 {
-    message("Running move logic Tests...");
+    message("Running move logic tests...");
 
     {
 	message("\tRock vs Rock");
