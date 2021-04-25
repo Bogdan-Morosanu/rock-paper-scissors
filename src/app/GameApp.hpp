@@ -28,9 +28,13 @@ namespace app
 
 	void setNrRounds(std::uint32_t nrRounds);
 	
-	void printIntro();
+	void printGameIntro() const;
 
+	void printEndGameResult() const;
+	
 	bool hasAi() const;
+
+	std::uint32_t roundsLeft() const;
 	
     private:
 

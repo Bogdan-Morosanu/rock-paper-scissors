@@ -1,5 +1,7 @@
 #include "GameApp.hpp"
 
+#include "app/prompt.hpp"
+
 #include <string>
 
 namespace
@@ -26,12 +28,23 @@ namespace app
     {
 	return mAi.isValid();
     }
+
+    std::uint32_t GameApp::roundsLeft() const
+    {
+	return mNrRounds;
+    }
     
     void GameApp::registerPlayerMove(rps::Move move)
     {
 	if (!mAi.isValid()) {
 	    throw std::logic_error("GameApp::registerPlayerMove ai oponent not generated yet!");
 	}
+
+	if (mNrRounds == 0u) {
+	    throw std::logic_error("GameApp::registerPlayerMove the game is over!");
+	}
+
+	mNrRounds--;
 	
 	rps::Move aiMove = mAi.value().nextMove();
 
@@ -51,7 +64,7 @@ namespace app
 	    std::cout << mAi.value().name() << " won!\n" << std::endl;
 	    break;
 	}
-	    
+	
 	mHistory.add(move, aiMove);
 
 	mAi.value().perceiveAdversaryMove(move);
@@ -84,11 +97,16 @@ namespace app
 	std::cout << "Number of rounds set to " << std::to_string(nrRounds) << std::endl;
     }
     
-    void GameApp::printIntro()
+    void GameApp::printGameIntro() const
     {
 	std::cout << "Welcome to space pirate RPS simulator!" << std::endl;
 	std::cout << "Please select your oponent" << std::endl;
-	std::cout << ">>>";
+	displayPrompt();
+    }
+
+    void GameApp::printEndGameResult() const
+    {
+	std::cout << "Game over." << std::endl;
     }
     
     rps::GameResult GameApp::result()
@@ -105,7 +123,8 @@ namespace app
 	auto gameResult = this->result();
 	out << "Game Score:\n"
 	    << mHumanName << " - " << gameResult.left.score << "\n"
-	    << mAi.value().name() << " - " << gameResult.right.score << std::endl;
+	    << mAi.value().name() << " - " << gameResult.right.score << "\n"
+	    << "Rounds left: " << this->mNrRounds << std::endl;
     }
 
 }

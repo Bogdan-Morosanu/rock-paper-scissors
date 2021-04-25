@@ -5,6 +5,7 @@
 
 #include "parser/Commands.hpp"
 #include "app/GameApp.hpp"
+#include "app/prompt.hpp"
 
 namespace app
 {
@@ -24,6 +25,7 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::ROCK);
+	    displayPrompt();
 	}
 
     private:
@@ -48,6 +50,7 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::PAPER);
+	    displayPrompt();
 	}
 
     private:
@@ -72,6 +75,7 @@ namespace app
 	void issue() const
 	{
 	    mGame->registerPlayerMove(rps::Move::SCISSORS);
+	    displayPrompt();
 	}
 
     private:

@@ -4,7 +4,7 @@ namespace psr {
     /// parse input stream in and log parsing errors to err
     void Parser::parseStream(std::istream &in, std::ostream &err)
     {
-	while (!in.eof()) {
+	while (!in.eof() && !exitCallback()) {
 	    std::string s;
 	    std::getline(in, s, '\n');
 

@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 {
     app::GameApp game;
 
-    game.printIntro();
+    game.printGameIntro();
 
     // grab opponent from input
     psr::Parser pickOponentParser;
@@ -22,12 +22,14 @@ int main(int argc, char **argv)
     // now grab rps commands
     psr::Parser gameRoundParser;
     gameRoundParser.pushBack(psr::unaryCommandParser(psr::EchoCommand{}));
-
     gameRoundParser.pushBack(psr::commandParser(app::RockCommand{game}));
     gameRoundParser.pushBack(psr::commandParser(app::PaperCommand{game}));
     gameRoundParser.pushBack(psr::commandParser(app::ScissorsCommand{game}));
+    gameRoundParser.setExitCallback([&game]() { return game.roundsLeft() == 0u; });
     
     gameRoundParser.parseStream(std::cin, std::cerr);
 
+    game.printEndGameResult();
+    
     return 0;
 }

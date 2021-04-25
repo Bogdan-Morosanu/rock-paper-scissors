@@ -2,6 +2,7 @@
 #define PSR_PARSER
 
 #include <iostream>
+#include <functional>
 
 #include "Commands.hpp"
 
@@ -13,6 +14,7 @@ namespace psr {
 	Parser()
 	    : cases()
 	    , exitParser(std::make_unique<CaseModel<CommandParser<ExitCommand>>>(standardExitParser()))
+	    , exitCallback([]() { return false; })
 	{ }
 
 	template < typename Case >
@@ -27,6 +29,11 @@ namespace psr {
 	{
 	    using ValueType = typename std::decay<ExitCase>::type;
             this->exitParser = std::make_unique<CaseModel<ValueType>>(std::forward<ExitCase>(ec));
+	}
+
+	void setExitCallback(std::function<bool(void)> ec)
+	{
+	    exitCallback = std::move(ec);
 	}
         
 	/// parse input stream in and log parsing errors to err
@@ -67,6 +74,8 @@ namespace psr {
 	std::vector<std::unique_ptr<CaseConcept>> cases;
 
 	std::unique_ptr<CaseConcept> exitParser;
+
+	std::function<bool(void)> exitCallback;
     };
 }
 
