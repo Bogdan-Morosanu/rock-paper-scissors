@@ -6,6 +6,7 @@
 
 namespace app
 {
+    /// a stand-in for c++17 std::optional
     template < typename T >
     class Optional {
     public:

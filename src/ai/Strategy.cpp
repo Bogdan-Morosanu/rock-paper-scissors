@@ -177,7 +177,7 @@ namespace detail
 	    mImpl = std::make_unique<detail::ElectricElephantStrategy>();
 	    break;
 
-	case SPACE_SQUID: default: // TODO implement for SCADA too
+	case SPACE_SQUID: default: // default to please compiler warnings
 	    mImpl = std::make_unique<detail::SpaceSquidStrategy>();
 	    break;
 	}
